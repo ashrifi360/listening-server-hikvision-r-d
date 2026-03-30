@@ -36,6 +36,7 @@ app.all("/messages", upload.any(), (req, res) => {
     }
 
     const formData = JSON.parse(eventLogStr);
+    console.log("RAW WEBHOOK PAYLOAD:", JSON.stringify(formData, null, 2));
     const eventInfo = formData.AccessControllerEvent || formData;
 
     // B. Extract the exact keys your firmware uses
