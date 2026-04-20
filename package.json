@@ -1,17 +1,24 @@
 {
   "name": "hikvision-listener",
   "version": "1.0.0",
-  "description": "",
+  "description": "��#\u0000 \u0000l\u0000i\u0000s\u0000t\u0000e\u0000n\u0000i\u0000n\u0000g\u0000-\u0000s\u0000e\u0000r\u0000v\u0000e\u0000r\u0000-\u0000h\u0000i\u0000k\u0000v\u0000i\u0000s\u0000i\u0000o\u0000n\u0000-\u0000r\u0000-\u0000d\u0000\r\u0000 \u0000",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "digest-fetch": "^3.1.1",
     "express": "^5.2.1",
-    "multer": "^2.1.1"
+    "multer": "^2.1.1",
+    "node-fetch": "^2.7.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com-ashrifi360:ashrifi360/listening-server-hikvision-r-d.git"
   }
 }

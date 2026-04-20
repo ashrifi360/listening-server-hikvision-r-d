@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 
 const app = express();
-const port = 3002;
+const port = 3006;
 
 // Ensure an upload directory exists for face scan images
 const uploadDir = path.join(__dirname, "attendance_images");
@@ -26,7 +26,7 @@ const IsJsonString = (str) => {
 // 2. PARSE MULTIPART/FORM-DATA (JSON + Image File)
 const upload = multer();
 
-app.all("/messages", upload.any(), (req, res) => {
+app.all("/message", upload.any(), (req, res) => {
     // A. Safely Extract the JSON Metadata
     let eventLogStr = "{}";
     if (req.body?.event_log && IsJsonString(req.body.event_log)) {
@@ -46,9 +46,16 @@ app.all("/messages", upload.any(), (req, res) => {
     const subEvent = eventInfo.subEventType;
 
     // C. Route the logic based on the event type
-    if (subEvent === 75 || subEvent === 1) {
-        // 75 = Face Match Success, 1 = Card Match Success
-        console.log(`[ ATTENDANCE] ID: ${employeeId} | Name: ${employeeName} | Time: ${scanTime}`);
+    if (subEvent === 75 || subEvent === 1 || subEvent === 2077) {
+        // 75 = Face Match, 1 = Card Match, 2077 = Face + Breathalyzer Match
+        let alcoholStatus = "";
+        if (eventInfo.alcoholDetectionInfo) {
+            const alcVal = eventInfo.alcoholDetectionInfo.concentrationInfo?.concentrationValue || 0;
+            const alcRes = eventInfo.alcoholDetectionInfo.result || "unknown";
+            alcoholStatus = ` | Alcohol: ${alcRes.toUpperCase()} (${alcVal} mg/100ml)`;
+        }
+
+        console.log(`[ ATTENDANCE] ID: ${employeeId} | Name: ${employeeName} | Time: ${scanTime}${alcoholStatus}`);
 
         // Save the Face Scan Image
         if (req.files && req.files.length > 0) {
