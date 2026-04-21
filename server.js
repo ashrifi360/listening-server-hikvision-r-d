@@ -46,16 +46,19 @@ app.all("/message", upload.any(), (req, res) => {
     const subEvent = eventInfo.subEventType;
 
     // C. Route the logic based on the event type
-    if (subEvent === 75 || subEvent === 1 || subEvent === 2077) {
-        // 75 = Face Match, 1 = Card Match, 2077 = Face + Breathalyzer Match
+    const validFaceEvents = [1, 75, 76, 154, 2077];
+    if (validFaceEvents.includes(subEvent)) {
+        // 75/2077/1 = Success, 76 = Unrecognized Face, 154 = Alcohol/Other Failure
         let alcoholStatus = "";
+        let logPrefix = (subEvent === 76 || subEvent === 154) ? "[ SCAN FAILED]" : "[ ATTENDANCE]";
+
         if (eventInfo.alcoholDetectionInfo) {
             const alcVal = eventInfo.alcoholDetectionInfo.concentrationInfo?.concentrationValue || 0;
             const alcRes = eventInfo.alcoholDetectionInfo.result || "unknown";
             alcoholStatus = ` | Alcohol: ${alcRes.toUpperCase()} (${alcVal} mg/100ml)`;
         }
 
-        console.log(`[ ATTENDANCE] ID: ${employeeId} | Name: ${employeeName} | Time: ${scanTime}${alcoholStatus}`);
+        console.log(`${logPrefix} ID: ${employeeId} | Name: ${employeeName} | Time: ${scanTime}${alcoholStatus}`);
 
         // Save the Face Scan Image
         if (req.files && req.files.length > 0) {
@@ -84,3 +87,10 @@ app.listen(port, "0.0.0.0", () => {
     console.log(`[+] SUPER-CATCHER is running on http://0.0.0.0:${port}`);
     console.log(`[+] Waiting for the terminal to send live scans...`);
 });
+
+
+
+
+
+
+
